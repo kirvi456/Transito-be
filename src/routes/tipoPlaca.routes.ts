@@ -1,0 +1,23 @@
+import { Router } from 'express'
+import { check } from 'express-validator';
+import { crearTipoPlaca } from '../controllers/tipoPlaca.controller';
+import { TipoPlacaNoRepetido } from '../helpers/db-validators/tipoPlaca.validator';
+import validarCampos from '../middlewares/validar-campos';
+import validarJWT from '../middlewares/validar-jwt';
+import { esAdmin } from '../middlewares/validar-roles';
+
+const router = Router();
+
+router.post(
+    '/',
+    [
+        check('tipoPlaca', 'Se debe especificar el tipo de placa').not().isEmpty(),
+        check('tipoPlaca').custom( TipoPlacaNoRepetido ),
+        validarJWT,
+        esAdmin,
+        validarCampos
+    ],
+    crearTipoPlaca
+)
+
+export default router;
