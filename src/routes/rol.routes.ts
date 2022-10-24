@@ -13,8 +13,7 @@ router.post(
     [
         check('nombre', 'Se debe especificar el nombre del rol').not().isEmpty(),
         check('nombre').custom( RolNoRepetido ),
-        validarJWT,
-        esAdmin,
+        
         validarCampos
     ],
     crearRol

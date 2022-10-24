@@ -30,8 +30,6 @@ router.get('/avatar/:id', [
 ], obtenerAvatar);
 
 router.post('/', [
-        validarJWT,
-        tieneRol(['ADMIN', 'DIRECTORPMT', 'DIGITADOR']),
         check('usuario', 'El usuario es obligatorio').not().isEmpty(),
         check('nombre', 'El nombre es obligatorio').not().isEmpty(),
         check('correo', 'El corre es obligatorio').not().isEmpty(),
