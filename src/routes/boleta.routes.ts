@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { check } from 'express-validator';
-import { crearBoleta, createFromFile } from '../controllers/boleta.controller';
+import { crearBoleta, createFromFile, createFromFileFake } from '../controllers/boleta.controller';
 import { ExisteAgente } from '../helpers/db-validators/agente.validators';
 import { ExisteArticulo } from '../helpers/db-validators/articulo.validator';
 import { BoletaNoRepetido } from '../helpers/db-validators/boleta.validators';
@@ -22,7 +22,7 @@ router.post(
         esAdmin,
         validarCampos
     ],
-    createFromFile
+    createFromFileFake
 )
 
 router.post(
