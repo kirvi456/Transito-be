@@ -31,7 +31,7 @@ export const createFromFile = async ( req : Request, res : Response ) => {
         let contador = 0;
 
         readXlsxFile(archivo, {dateFormat: 'dd/mm/yy'})
-        .then((rows) => {
+        .then((rows : any) => {
             rows.forEach( async( row : any ) => {
                 const noboleta = row[0];
                 const fecha = (new Date(row[1].toString())).getTime();
@@ -112,7 +112,7 @@ export const createFromFileFake = async ( req : Request, res : Response ) => {
         let contador = 0;
 
         readXlsxFile(archivo, {dateFormat: 'dd/mm/yy'})
-        .then((rows) => {
+        .then((rows : any) => {
             rows.forEach( async( row : any ) => {
                 const noboleta = row[0];
                 const fecha = (new Date(row[1].toString())).getTime();
