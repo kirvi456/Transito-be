@@ -110,6 +110,7 @@ export const createFromFileFake = async ( req : Request, res : Response ) => {
         )
 
         let contador = 0;
+        const arr = [];
 
         readXlsxFile(archivo, {dateFormat: 'dd/mm/yy'})
         .then((rows : any) => {
@@ -163,6 +164,15 @@ export const createFromFileFake = async ( req : Request, res : Response ) => {
                     articulo
                 });
 
+                arr.push({
+                    noboleta, 
+                    fecha, 
+                    tipoPlacaString,
+                    noPlaca,
+                    articuloStr,
+                    agenteStr
+                })
+                
                 contador++;
 
             })    
@@ -170,7 +180,7 @@ export const createFromFileFake = async ( req : Request, res : Response ) => {
             
         })
         .then( () => {
-            res.json({msg: 'Boletas procesadas: ' + contador })
+            res.json( arr )
         })
         
     } catch ( error ) {
