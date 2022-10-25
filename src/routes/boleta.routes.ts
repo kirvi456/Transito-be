@@ -16,9 +16,21 @@ import { ExisteTipoVehiculo } from '../helpers/db-validators/Vehiculo/tipovehicu
 const router = Router();
 
 router.post(
-    '/file',
+    '/filefake',
     [
+        validarJWT,
+        esAdmin,
+        validarCampos
+    ],
+    createFromFile
+)
 
+router.post(
+    '/filefake',
+    [
+        validarJWT,
+        esAdmin,
+        validarCampos
     ],
     createFromFile
 )
