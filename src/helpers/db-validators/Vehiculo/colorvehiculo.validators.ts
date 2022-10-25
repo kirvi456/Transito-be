@@ -28,3 +28,19 @@ export const ExisteColorVehiculo = async ( id : string ) => {
         throw new Error( getErrorMessage(error) );
     }
 }
+
+export const BuscarColorVehiculo = async ( color : string ) => {
+    try{
+
+        const colorVehiculo = await ColorVehiculo.findOne( { color } ).collation({ locale: 'es', strength: 2 });
+
+        if( !colorVehiculo )
+            throw new Error(`La color <${ color }> no se encuentra registrada.`)
+
+        return colorVehiculo._id;
+
+    } catch ( error ) {        
+        console.log( error );
+        throw new Error( getErrorMessage(error) );
+    }
+}

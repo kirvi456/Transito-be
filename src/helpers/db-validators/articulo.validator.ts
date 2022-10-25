@@ -15,6 +15,22 @@ export const ArticuloNoRepetido = async ( no : string ) => {
     }
 }
 
+export const BuscarArticulo = async ( no : string ) => {
+    try{
+
+        const articulo = await Articulo.findOne( { no } ).collation({ locale: 'es', strength: 2 });
+
+        if( !articulo )
+            throw new Error(`El artículo <${ no }> no se encuentra registrado.`);
+
+        return articulo._id;
+
+    } catch ( error ) {        
+        console.log( error );
+        throw new Error( getErrorMessage(error) );
+    }
+}
+
 export const ExisteArticulo = async ( id : string ) => {
     try{
 

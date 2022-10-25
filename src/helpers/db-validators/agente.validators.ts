@@ -15,6 +15,22 @@ export const AgenteNoRepetido = async ( chapa : string ) => {
     }
 }
 
+export const BuscarAgente = async ( chapa : string ) => {
+    try{
+
+        const agente = await Agente.findOne( { 'chapa': { $regex: chapa, $options: 'i' } } );
+
+        if( !agente )
+            throw new Error(`El agente <${ chapa }> no se encuentra registrado.`)
+
+        return agente._id;
+
+    } catch ( error ) {        
+        console.log( error );
+        throw new Error( getErrorMessage(error) );
+    }
+}
+
 export const ExisteAgente = async ( id : string ) => {
     try{
 

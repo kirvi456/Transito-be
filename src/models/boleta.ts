@@ -3,6 +3,10 @@ import agente from './agente';
 import articulo from './articulo';
 import tipoFirma from './Conductor/tipoFirma';
 import tipoLicencia from './Conductor/tipoLicencia';
+import tipoPlaca from './tipoPlaca';
+import ColorVehiculo from './Vehiculo/ColorVehiculo';
+import MarcaVehiculo from './Vehiculo/MarcaVehiculo';
+import TipoVehiculo from './Vehiculo/TipoVehiculo';
 
 const ConductorSchema = new Schema({
     nombre: {
@@ -34,13 +38,65 @@ const ConductorSchema = new Schema({
     }
 })
 
+const VehiculoSchema = new Schema ({
+    tipoPlaca: {
+        type: Schema.Types.ObjectId,
+        ref: tipoPlaca,
+        required: [true, 'Se debe de especificar el tipo de placa']
+    },
+    noPlaca: {
+        type: String,
+        required: [true, 'Se debe especificar el numero de placa'],
+    },
+    marca: {
+        type: Schema.Types.ObjectId,
+        ref: MarcaVehiculo,
+        required: [true, 'Se debe de especificar el tipo de placa']
+    },
+    color: {
+        type: Schema.Types.ObjectId,
+        ref: ColorVehiculo,
+        required: [true, 'Se debe de especificar el tipo de placa']
+    },
+    tipo: {
+        type: Schema.Types.ObjectId,
+        ref: TipoVehiculo,
+        required: [true, 'Se debe de especificar el tipo de placa']
+    },
+    noTarjeta: {
+        type: String,
+        required: [true, 'Se debe especificar el numero de tarjeta'],
+        default: '----'
+    },
+    nit: {
+        type: String,
+        required: [true, 'Se debe especificar el numero de nit'],
+        default: '----'
+    },
+})
+
+const PagoSchema = new Schema({
+    pagoTipo: {
+        type: String,
+        required: [true, 'Se debe especificar tipo de pago'],
+        default: 'NO PAGADA'
+    },
+    recibo: {
+        type: String,
+    },
+    reciboImage: {
+        type: String,
+    }
+})
+
 const BoletaSchema = new Schema({
     noboleta:{
         type: Number,
-        required: [true, 'Se debe indicar el número de la boleta']
+        required: [true, 'Se debe indicar el número de la boleta'],
+        unique: true
     },
     fecha:{
-        type: String,
+        type: Number,
         required: [true, 'Se debe indicar la fecha y hora de la multa']
     },
     lugar:{
@@ -65,6 +121,15 @@ const BoletaSchema = new Schema({
     conductor: {
         type: ConductorSchema
     },
+    vehiculo: {
+        type: VehiculoSchema
+    },
+    estado: {
+        type: String,
+        required: true,
+        default: 'EMITIDA'
+    },
+    pago: PagoSchema
 });
 
 export default model('Boleta', BoletaSchema);

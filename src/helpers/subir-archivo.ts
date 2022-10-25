@@ -7,13 +7,14 @@ import fileUpload from 'express-fileupload';
 
 const extensionesPermitidas = {
     img: ['png', 'jpg', 'jpeg'],
-    pdf: ['pdf']
+    pdf: ['pdf'],
+    excel: ['xlsx']
 }
 
 
 export const subirArchivo = ( 
     files : fileUpload.FileArray, 
-    tipoArchivo : 'img' | 'pdf', 
+    tipoArchivo : 'img' | 'pdf' | 'excel', 
     carpeta : string = '', 
     archivoBorrarName : string = ''
     ) : Promise<string> => {

@@ -1,15 +1,27 @@
 import { Router } from 'express'
 import { check } from 'express-validator';
-import { crearBoleta } from '../controllers/boleta.controller';
+import { crearBoleta, createFromFile } from '../controllers/boleta.controller';
 import { ExisteAgente } from '../helpers/db-validators/agente.validators';
 import { ExisteArticulo } from '../helpers/db-validators/articulo.validator';
 import { BoletaNoRepetido } from '../helpers/db-validators/boleta.validators';
 import { ExisteTipoLicencia } from '../helpers/db-validators/tipolicencia.validators';
+import { TipoPlacaExiste } from '../helpers/db-validators/tipoPlaca.validator';
 import validarCampos from '../middlewares/validar-campos';
 import validarJWT from '../middlewares/validar-jwt';
 import { esAdmin } from '../middlewares/validar-roles';
+import { ExisteMarcaVehiculo } from '../helpers/db-validators/Vehiculo/marcavehiculo.validators';
+import { ExisteColorVehiculo } from '../helpers/db-validators/Vehiculo/colorvehiculo.validators';
+import { ExisteTipoVehiculo } from '../helpers/db-validators/Vehiculo/tipovehiculo.validators';
 
 const router = Router();
+
+router.post(
+    '/file',
+    [
+
+    ],
+    createFromFile
+)
 
 router.post(
     '/',
@@ -34,6 +46,16 @@ router.post(
         check('conductor.licenciaBloqueada', 'Se debe especificar si la licencia no esta bloqueada').isBoolean(),
         check('conductor.genero', 'Se debe especificar el genero del conductor').not().isEmpty(),
         
+        check('vehiculo.tipoPlaca', 'Se debe especificar el número de placa').not().isEmpty(),
+        check('vehiculo.tipoPlaca').custom( TipoPlacaExiste ),
+        check('vehiculo.noPlaca', 'Se debe especificar el número de placa').not().isEmpty(),
+        check('vehiculo.marca', 'Se debe especificar la marca del vehiculo').not().isEmpty(),
+        check('vehiculo.marca').custom( ExisteMarcaVehiculo ),
+        check('vehiculo.color', 'Se debe especificar el color del vehiculo').not().isEmpty(),
+        check('vehiculo.color').custom( ExisteColorVehiculo ),
+        check('vehiculo.tipo', 'Se debe especificar el tipo del vehiculo').not().isEmpty(),
+        check('vehiculo.tipo').custom( ExisteTipoVehiculo ),
+
         
         validarJWT,
         esAdmin,
