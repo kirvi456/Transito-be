@@ -21,6 +21,8 @@ import tipoLicenciaRoutes from '../routes/tipoLicencia.routes';
 import tipoFirmaRoutes from '../routes/tipoFirma.routes';
 import boletaRoutes from '../routes/boleta.routes';
 import marcaVehiculoRoutes from '../routes/Vehiculo/marca.routes';
+import colorVehiculoRoutes from '../routes/Vehiculo/color.routes';
+import tipoVehiculoRoutes from '../routes/Vehiculo/tipo.routes';
 
 
 
@@ -45,6 +47,8 @@ class Server {
         tipoFirmaRoutes:          '/api/tipofirma',
         boletaRoutes:             '/api/boleta',
         marcaVehiculo:            '/api/marcavehiculo',
+        colorVehiculo:            '/api/colorvehiculo',
+        tipoVehiculo:             '/api/tipovehiculo',
     
     };
 
@@ -79,6 +83,8 @@ class Server {
         this.app.use ( this.paths.tipoFirmaRoutes         , tipoFirmaRoutes )
         this.app.use ( this.paths.boletaRoutes            , boletaRoutes )
         this.app.use ( this.paths.marcaVehiculo           , marcaVehiculoRoutes )
+        this.app.use ( this.paths.colorVehiculo           , colorVehiculoRoutes )
+        this.app.use ( this.paths.tipoVehiculo            , tipoVehiculoRoutes )
     }
 
     middlewares() {
