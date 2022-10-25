@@ -10,7 +10,8 @@ export const crearMarcaVehiculo = async ( req : Request, res : Response ) => {
         const { marca } = req.body;
 
         const nuevoMarcaVehiculo = new MarcaVehiculo({ 
-            marca : marca.toUpperCase()
+            marca : marca.toUpperCase(), 
+            userCreated: req.currentUser
         });
 
         await nuevoMarcaVehiculo.save();

@@ -10,7 +10,8 @@ export const crearTipoLicencia = async ( req : Request, res : Response ) => {
 
         const nuevoTipoLicencia = new TipoLicencia({ 
             tipo : tipo.toUpperCase(), 
-            desc: desc.toUpperCase()
+            desc: desc.toUpperCase(), 
+            userCreated: req.currentUser
         });
 
         await nuevoTipoLicencia.save();

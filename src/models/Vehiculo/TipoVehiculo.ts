@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import usuario from '../usuario';
 
 const TipoVehiculoSchema = new Schema({
     tipo: {
@@ -8,6 +9,16 @@ const TipoVehiculoSchema = new Schema({
     active: {
         type: Boolean,
         default: true
+    },
+    createdAt: {
+        type: Number,
+        required: true,
+        default: () => ( new Date() ).getTime()
+    },
+    userCreated: {
+        type: Schema.Types.ObjectId,
+        ref: usuario,
+        required: [true, 'Se dene especificar quien creo el tipo']
     }
 });
 

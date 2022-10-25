@@ -9,7 +9,8 @@ export const crearTipoFirma = async ( req : Request, res : Response ) => {
         const { tipo } = req.body;
 
         const nuevoTipoFirma = new TipoFirma({ 
-            tipo : tipo.toUpperCase()
+            tipo : tipo.toUpperCase(), 
+            userCreated: req.currentUser
         });
 
         await nuevoTipoFirma.save();

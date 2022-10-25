@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import usuario from '../usuario';
 
 const MarcaVehiculoSchema = new Schema({
     marca: {
@@ -8,6 +9,16 @@ const MarcaVehiculoSchema = new Schema({
     active: {
         type: Boolean,
         default: true
+    },
+    createdAt: {
+        type: Number,
+        required: true,
+        default: () => ( new Date() ).getTime()
+    },
+    userCreated: {
+        type: Schema.Types.ObjectId,
+        ref: usuario,
+        required: [true, 'Se dene especificar quien creo la marca']
     }
 });
 
