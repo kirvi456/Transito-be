@@ -109,8 +109,7 @@ export const createFromFileFake = async ( req : Request, res : Response ) => {
             await subirArchivo( req.files!, 'excel', '/exceltmp/', '' )
         )
 
-        let contador = 0;
-        const arr = [];
+        const arr : any[] = [];
 
         readXlsxFile(archivo, {dateFormat: 'dd/mm/yy'})
         .then((rows : any) => {
@@ -173,7 +172,6 @@ export const createFromFileFake = async ( req : Request, res : Response ) => {
                     agenteStr
                 })
                 
-                contador++;
 
             })    
             
