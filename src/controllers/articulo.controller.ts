@@ -9,7 +9,7 @@ export const crearArticulo = async ( req : Request, res : Response ) => {
         const { desc, no, valor } = req.body;
 
         const nuevoArticulo = new Articulo({ 
-            desc, 
+            desc : desc.toUpperCase(), 
             no : no.toUpperCase(), 
             valor,
             userCreated : req.currentUser 

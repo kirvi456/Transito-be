@@ -9,9 +9,9 @@ export const crearAgente = async ( req : Request, res : Response ) => {
         const { nombre, chapa, genero } = req.body;
 
         const nuevoAgente = new Agente({ 
-            nombre, 
+            nombre : nombre.toUpperCase(), 
             chapa : chapa.toUpperCase(), 
-            genero, 
+            genero : genero.toUpperCase(), 
             userCreated : req.currentUser 
         });
 

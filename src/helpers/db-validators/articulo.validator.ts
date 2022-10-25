@@ -14,3 +14,17 @@ export const ArticuloNoRepetido = async ( no : string ) => {
         throw new Error( getErrorMessage(error) );
     }
 }
+
+export const ExisteArticulo = async ( id : string ) => {
+    try{
+
+        const articulo = await Articulo.findById( id );
+
+        if( !articulo )
+            throw new Error(`El artículo no se encuentra registrado.`)
+
+    } catch ( error ) {        
+        console.log( error );
+        throw new Error( getErrorMessage(error) );
+    }
+}

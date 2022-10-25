@@ -1,5 +1,6 @@
 
 import { Request, Response } from 'express'
+import { formatFinalError } from '../helpers/error-messages';
 import TipoPlaca from '../models/tipoPlaca';
 
 export const crearTipoPlaca = async ( req : Request, res : Response ) => {
@@ -9,7 +10,7 @@ export const crearTipoPlaca = async ( req : Request, res : Response ) => {
         const { tipoPlaca } = req.body;
 
         const nuevoTipoPlaca = new TipoPlaca({ 
-            tipo : tipoPlaca, 
+            tipo : tipoPlaca.toUpperCase(), 
             userCreated: req.currentUser
         });
 
@@ -19,6 +20,8 @@ export const crearTipoPlaca = async ( req : Request, res : Response ) => {
 
     } catch ( error ) {
         console.log( error )
-        res.status( 500 ).json({ msg: 'No se pudo crear el tipo de placa. Contancte con el Administrador. '})
+        res
+        .status(500)
+        .json(formatFinalError(error, 'No se pudo crear el tipo de placa. Contancte con el Administrador. '))
     }
 }

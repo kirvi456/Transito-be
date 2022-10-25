@@ -17,6 +17,12 @@ import authRoutes from '../routes/auth.routes';
 import tipoPlacaRoutes from '../routes/tipoPlaca.routes';
 import agenteRoutes from '../routes/agente.routes';
 import articuloRoutes from '../routes/articulo.routes';
+import tipoLicenciaRoutes from '../routes/tipoLicencia.routes';
+import tipoFirmaRoutes from '../routes/tipoFirma.routes';
+import boletaRoutes from '../routes/boleta.routes';
+import marcaVehiculoRoutes from '../routes/Vehiculo/marca.routes';
+
+
 
 class Server {
     
@@ -35,6 +41,10 @@ class Server {
         tipoPlaca:      '/api/tipoplaca',
         agente:         '/api/agente',
         articulo:       '/api/articulo',
+        tipoLicenciaRoutes:       '/api/tipolicencia',
+        tipoFirmaRoutes:          '/api/tipofirma',
+        boletaRoutes:             '/api/boleta',
+        marcaVehiculo:            '/api/marcavehiculo',
     
     };
 
@@ -65,6 +75,10 @@ class Server {
         this.app.use ( this.paths.tipoPlaca               , tipoPlacaRoutes )
         this.app.use ( this.paths.agente                  , agenteRoutes )
         this.app.use ( this.paths.articulo                , articuloRoutes )
+        this.app.use ( this.paths.tipoLicenciaRoutes      , tipoLicenciaRoutes )
+        this.app.use ( this.paths.tipoFirmaRoutes         , tipoFirmaRoutes )
+        this.app.use ( this.paths.boletaRoutes            , boletaRoutes )
+        this.app.use ( this.paths.marcaVehiculo           , marcaVehiculoRoutes )
     }
 
     middlewares() {

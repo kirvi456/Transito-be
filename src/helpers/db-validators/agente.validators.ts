@@ -14,3 +14,17 @@ export const AgenteNoRepetido = async ( chapa : string ) => {
         throw new Error( getErrorMessage(error) );
     }
 }
+
+export const ExisteAgente = async ( id : string ) => {
+    try{
+
+        const agente = await Agente.findById( id );
+
+        if( !agente )
+            throw new Error(`El agente no se encuentra registrado.`)
+
+    } catch ( error ) {        
+        console.log( error );
+        throw new Error( getErrorMessage(error) );
+    }
+}

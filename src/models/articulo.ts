@@ -23,7 +23,7 @@ const ArticuloSchema = new Schema({
     userCreated: {
         type: Schema.Types.ObjectId,
         ref: usuario,
-        required: [true, 'Se dene especificar quien creo el agente']
+        required: [true, 'Se dene especificar quien creo el articulo']
     },
     active: {
         type: Boolean,
