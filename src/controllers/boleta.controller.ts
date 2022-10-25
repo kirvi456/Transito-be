@@ -109,10 +109,10 @@ export const createFromFileFake = async ( req : Request, res : Response ) => {
             await subirArchivo( req.files!, 'excel', '/exceltmp/', '' )
         )
 
-        const arr : any[] = [];
-
+        
         readXlsxFile(archivo, {dateFormat: 'dd/mm/yy'})
         .then((rows : any) => {
+            const arr : any[] = [];
             rows.forEach( async( row : any ) => {
                 const noboleta = row[0];
                 const fecha = (new Date(row[1].toString())).getTime();
@@ -171,13 +171,22 @@ export const createFromFileFake = async ( req : Request, res : Response ) => {
                     articuloStr,
                     agenteStr
                 })
+
+                console.log(
+                    noboleta, 
+                    fecha, 
+                    tipoPlacaString,
+                    noPlaca,
+                    articuloStr,
+                    agenteStr)
                 
 
             })    
             
+            return arr;
             
         })
-        .then( () => {
+        .then( (arr : any[]) => {
             res.json( arr )
         })
         
