@@ -20,10 +20,7 @@ export const BuscarAgente = async ( chapa : string ) => {
 
         const agente = await Agente.findOne( { 'chapa': { $regex: chapa, $options: 'i' } } );
 
-        if( !agente )
-            throw new Error(`El agente <${ chapa }> no se encuentra registrado.`)
-
-        return agente._id;
+        return agente  ? agente._id : undefined;
 
     } catch ( error ) {        
         console.log( error );

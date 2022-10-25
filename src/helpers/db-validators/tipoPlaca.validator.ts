@@ -16,17 +16,11 @@ export const TipoPlacaNoRepetido = async ( tipoPlaca : string ) => {
 }
 
 export const BuscarTipoPlaca = async ( tipoPlaca : string ) => {
-    try{
 
         const tipo = await TipoPlaca.findOne( { tipo: tipoPlaca } ).collation({ locale: 'es', strength: 2 });
 
-        if( !tipo )
-            throw new Error(`El tipo de placa <${ tipoPlaca }> no se encuentra registrado`)
-        return tipo._id;
-    } catch ( error ) {        
-        console.log( error );
-        throw new Error( getErrorMessage(error) );
-    }
+        return tipo ? tipo._id : undefined
+    
 }
 
 export const TipoPlacaExiste = async ( id : string ) => {

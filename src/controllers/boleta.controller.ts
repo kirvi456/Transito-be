@@ -33,64 +33,78 @@ export const createFromFile = async ( req : Request, res : Response ) => {
         readXlsxFile(archivo, {dateFormat: 'dd/mm/yy'})
         .then((rows : any) => {
             rows.forEach( async( row : any ) => {
-                const noboleta = row[0];
-                const fecha = (new Date(row[1].toString())).getTime();
-                const nombre = row[2].toString();
-                const tipoPlacaString = row[3].toString().split('-')[0];
-                const noPlaca = row[3].toString().split('-')[1];
-                const agenteStr = formatearAgente(row[4].toString());
-                const articuloStr = row[5].toString().replace(' ', '.');
-                const valor = Number(row[6].toString().replace('Q.','').replace('.00',''));
+                try {
+                    const noboleta = row[0];
+                    const fecha = (new Date(row[1].toString())).getTime();
+                    const nombre = row[2].toString();
+                    const tipoPlacaString = row[3].toString().split('-')[0];
+                    const noPlaca = row[3].toString().split('-')[1];
+                    const agenteStr = formatearAgente(row[4].toString());
+                    const articuloStr = row[5].toString().replace(' ', '.');
+                    const valor = Number(row[6].toString().replace('Q.','').replace('.00',''));
 
-                const tipoPlaca = await BuscarTipoPlaca( tipoPlacaString );
+                    const tipoPlaca = await BuscarTipoPlaca( tipoPlacaString );
+                    if( !tipoPlaca ) 
+                        throw new Error('No se encontro tipo de placa ' + tipoPlaca + ' en boleta ' + noboleta);
 
-                const articulo = await BuscarArticulo(articuloStr)
+                    const articulo = await BuscarArticulo(articuloStr);
+                    if( !articulo ) 
+                        throw new Error('No se encontro ariticulo ' + articulo + ' en boleta ' + noboleta);
 
-                const agente = await BuscarAgente( agenteStr )
+                    const agente = await BuscarAgente( agenteStr );
+                    if( !agente ) 
+                        throw new Error('No se encontro agente ' + agente + ' en boleta ' + noboleta);
 
-                const firma = '6357f0186052529e73c19e0f';
-                const lugar = 'San José Pinula';
 
-                const conductor = {
-                    nombre,
-                    tipoLicencia: '6357f17b6052529e73c19e2f',
-                    noLicencia: '0000 00000 0000',
-                    folioLicencia: '00',
-                    licenciaBloqueada: false,
-                    genero: 'SIN ESPECIFICAR'
+                    const firma = '6357f0186052529e73c19e0f';
+                    const lugar = 'San José Pinula';
+
+                    const conductor = {
+                        nombre,
+                        tipoLicencia: '6357f17b6052529e73c19e2f',
+                        noLicencia: '0000 00000 0000',
+                        folioLicencia: '00',
+                        licenciaBloqueada: false,
+                        genero: 'SIN ESPECIFICAR'
+                    }
+
+                    const vehiculo = {
+                        tipoPlaca,
+                        noPlaca,
+                        marca: '6357fb664df530ce3d80c94c',
+                        color: '63580785dc8c3af56994376c',
+                        tipo: '63580d9dd02dcd0897f6a1d1',
+                        noTarjeta: '00000000',
+                        nit: '000000000'
+                    }
+
+
+                    const nuevaBoleta = new Boleta({ 
+                        noboleta, 
+                        fecha, 
+                        firma,
+                        lugar,
+                        conductor, 
+                        vehiculo,
+                        agente, 
+                        articulo
+                    });
+
+                    contador++;
+                    nuevaBoleta.save();
+
+                } catch ( error ){
+                    console.log(error)
+                    res
+                    .status(500)
+                    .json(formatFinalError(error, 'No se pudo crear la boleta. Contancte con el Administrador. '))
                 }
-
-                const vehiculo = {
-                    tipoPlaca,
-                    noPlaca,
-                    marca: '6357fb664df530ce3d80c94c',
-                    color: '63580785dc8c3af56994376c',
-                    tipo: '63580d9dd02dcd0897f6a1d1',
-                    noTarjeta: '00000000',
-                    nit: '000000000'
-                }
-
-
-                const nuevaBoleta = new Boleta({ 
-                    noboleta, 
-                    fecha, 
-                    firma,
-                    lugar,
-                    conductor, 
-                    vehiculo,
-                    agente, 
-                    articulo
-                });
-
-                contador++;
-                nuevaBoleta.save();
-
             })    
             
-            
+            return contador;
         })
-        .then( () => {
-            res.json({msg: 'Boletas procesadas: ' + contador })
+        .then( ( c ) => {
+            res.json({msg: 'Boletas procesadas: ' + c })
         })
         
     } catch ( error ) {
@@ -112,87 +126,91 @@ export const createFromFileFake = async ( req : Request, res : Response ) => {
         
         readXlsxFile(archivo, {dateFormat: 'dd/mm/yy'})
         .then((rows : any) => {
-            const arr : any[] = [];
-            rows.forEach( async( row : any ) => {
-                const noboleta = row[0];
-                const fecha = (new Date(row[1].toString())).getTime();
-                const nombre = row[2].toString();
-                const tipoPlacaString = row[3].toString().split('-')[0];
-                const noPlaca = row[3].toString().split('-')[1];
-                const agenteStr = formatearAgente(row[4].toString());
-                const articuloStr = row[5].toString().replace(' ', '.');
-                const valor = Number(row[6].toString().replace('Q.','').replace('.00',''));
 
-                const tipoPlaca = await BuscarTipoPlaca( tipoPlacaString );
-
-                const articulo = await BuscarArticulo(articuloStr)
-
-                const agente = await BuscarAgente( agenteStr )
-
-                const firma = '6357f0186052529e73c19e0f';
-                const lugar = 'San José Pinula';
-
-                const conductor = {
-                    nombre,
-                    tipoLicencia: '6357f17b6052529e73c19e2f',
-                    noLicencia: '0000 00000 0000',
-                    folioLicencia: '00',
-                    licenciaBloqueada: false,
-                    genero: 'SIN ESPECIFICAR'
-                }
-
-                const vehiculo = {
-                    tipoPlaca,
-                    noPlaca,
-                    marca: '6357fb664df530ce3d80c94c',
-                    color: '63580785dc8c3af56994376c',
-                    tipo: '63580d9dd02dcd0897f6a1d1',
-                    noTarjeta: '00000000',
-                    nit: '000000000'
-                }
-
-
-                const nuevaBoleta = new Boleta({ 
-                    noboleta, 
-                    fecha, 
-                    firma,
-                    lugar,
-                    conductor, 
-                    vehiculo,
-                    agente, 
-                    articulo
-                });
-
-                arr.push({
-                    noboleta, 
-                    fecha, 
-                    tipoPlacaString,
-                    noPlaca,
-                    articuloStr,
-                    agenteStr
-                })
-
-                console.log(
-                    noboleta, 
-                    fecha, 
-                    tipoPlacaString,
-                    noPlaca,
-                    articuloStr,
-                    agenteStr)
+            
+            rows.forEach( async ( row : any ) => {
+                try {
                 
+                    const noboleta = row[0];
+                    const fecha = (new Date(row[1].toString())).getTime();
+                    const nombre = row[2].toString();
+                    const tipoPlacaString = row[3].toString().split('-')[0];
+                    const noPlaca = row[3].toString().split('-')[1];
+                    const agenteStr = formatearAgente(row[4].toString());
+                    const articuloStr = row[5].toString().replace(' ', '.');
+                    const valor = Number(row[6].toString().replace('Q.','').replace('.00',''));
+
+
+                    
+
+                    const tipoPlaca = await BuscarTipoPlaca( tipoPlacaString );
+                    if( !tipoPlaca ) 
+                        throw new Error('No se encontro tipo de placa ' + tipoPlaca + ' en boleta ' + noboleta);
+
+                    const articulo = await BuscarArticulo(articuloStr);
+                    if( !articulo ) 
+                        throw new Error('No se encontro ariticulo ' + articulo + ' en boleta ' + noboleta);
+
+                    const agente = await BuscarAgente( agenteStr );
+                    if( !agente ) 
+                        throw new Error('No se encontro agente ' + agente + ' en boleta ' + noboleta);
+
+
+
+                    const firma = '6357f0186052529e73c19e0f';
+                    const lugar = 'San José Pinula';
+
+                    const conductor = {
+                        nombre,
+                        tipoLicencia: '6357f17b6052529e73c19e2f',
+                        noLicencia: '0000 00000 0000',
+                        folioLicencia: '00',
+                        licenciaBloqueada: false,
+                        genero: 'SIN ESPECIFICAR'
+                    }
+
+                    const vehiculo = {
+                        tipoPlaca,
+                        noPlaca,
+                        marca: '6357fb664df530ce3d80c94c',
+                        color: '63580785dc8c3af56994376c',
+                        tipo: '63580d9dd02dcd0897f6a1d1',
+                        noTarjeta: '00000000',
+                        nit: '000000000'
+                    }
+
+
+                    const nuevaBoleta = new Boleta({ 
+                        noboleta, 
+                        fecha, 
+                        firma,
+                        lugar,
+                        conductor, 
+                        vehiculo,
+                        agente, 
+                        articulo
+                    });
+
+                
+                } catch( error ) {
+                    console.log(error)
+                    res
+                    .status(500)
+                    .json(formatFinalError(error, 'No se pudo crear la boleta. Contancte con el Administrador. '))
+                }
 
             })    
             
-            return arr;
             
         })
-        .then( (arr : any[]) => {
-            res.json( arr )
+        .catch( ( error ) => {
+            console.log('pakulo2')
+            res.status(400).json({error})
         })
         
     } catch ( error ) {
-        console.log(error)
-        res.status(400).json({error: 'error'})
+        console.log('pakulo4')
+        res.status(400).json({error})
     }
 }
 
