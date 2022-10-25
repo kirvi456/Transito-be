@@ -7,10 +7,11 @@ export const crearTipoPlaca = async ( req : Request, res : Response ) => {
 
     try{
         
-        const { tipoPlaca } = req.body;
+        const { tipoPlaca, desc } = req.body;
 
         const nuevoTipoPlaca = new TipoPlaca({ 
-            tipo : tipoPlaca.toUpperCase(), 
+            tipo : tipoPlaca.toUpperCase(),
+            desc : desc.toUpperCase(), 
             userCreated: req.currentUser
         });
 
