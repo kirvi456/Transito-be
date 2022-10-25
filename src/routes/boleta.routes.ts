@@ -26,7 +26,7 @@ router.post(
 )
 
 router.post(
-    '/filefake',
+    '/file',
     [
         validarJWT,
         esAdmin,
