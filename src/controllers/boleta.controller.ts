@@ -104,9 +104,9 @@ export const createFromFile = async ( req : Request, res : Response ) => {
             return contador;
         })
         .then( ( c ) => {
+            console.log('entro')
             res.json({msg: 'Boletas procesadas: ' + c })
         })
-        
     } catch ( error ) {
         console.log(error)
         res.status(400).json({error: 'error'})
@@ -202,6 +202,9 @@ export const createFromFileFake = async ( req : Request, res : Response ) => {
             })    
             
             
+        })
+        .then(() => {
+            res.json({ msg : 'Todo parece estar correcto'})
         })
         .catch( ( error ) => {
             console.log('pakulo2')
