@@ -87,17 +87,7 @@ const PagoSchema = new Schema({
     },
     reciboImage: {
         type: String,
-    },
-    createdAt: {
-        type: Number,
-        required: true,
-        default: () => ( new Date() ).getTime()
-    },
-    userCreated: {
-        type: Schema.Types.ObjectId,
-        ref: usuario,
-        required: [true, 'Se dene especificar quien creo el articulo']
-    },
+    }
 })
 
 const BoletaSchema = new Schema({
@@ -142,7 +132,17 @@ const BoletaSchema = new Schema({
     },
     pago: {
         type: PagoSchema
-    }
+    },
+    createdAt: {
+        type: Number,
+        required: true,
+        default: () => ( new Date() ).getTime()
+    },
+    userCreated: {
+        type: Schema.Types.ObjectId,
+        ref: usuario,
+        required: [true, 'Se dene especificar quien creo el articulo']
+    },
 });
 
 BoletaSchema.methods.toJSON = function() {
