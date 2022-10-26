@@ -14,3 +14,10 @@ export const BoletaNoRepetido = async ( noboleta : number ) => {
         throw new Error( getErrorMessage(error) );
     }
 }
+
+export const BuscarBoleta = async ( noboleta : number ) => {
+        const boleta = await Boleta.findOne( { noboleta } ).collation({ locale: 'es', strength: 2 });
+
+        return boleta ? boleta._id : undefined;
+
+}
