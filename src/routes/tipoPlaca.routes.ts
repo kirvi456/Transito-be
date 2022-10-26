@@ -1,12 +1,19 @@
 import { Router } from 'express'
 import { check } from 'express-validator';
-import { crearTipoPlaca } from '../controllers/tipoPlaca.controller';
+import { crearTipoPlaca, obtenerPublic } from '../controllers/tipoPlaca.controller';
 import { TipoPlacaNoRepetido } from '../helpers/db-validators/tipoPlaca.validator';
 import validarCampos from '../middlewares/validar-campos';
 import validarJWT from '../middlewares/validar-jwt';
 import { esAdmin } from '../middlewares/validar-roles';
 
 const router = Router();
+
+router.get('/',
+    [
+
+    ],
+    obtenerPublic
+)
 
 router.post(
     '/',
