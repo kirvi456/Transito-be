@@ -29,7 +29,7 @@ const TipoPlacaSchema = new Schema({
 })
 
 TipoPlacaSchema.methods.toJSON = function() {
-    const {__version, __v, createdAt, userCreated, ...tipoPlaca} = this.toObject();
+    const {__version, __v, createdAt, userCreated, active, ...tipoPlaca} = this.toObject();
     return tipoPlaca;
 }
 

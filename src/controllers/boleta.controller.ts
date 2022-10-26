@@ -18,6 +18,38 @@ const formatearAgente = ( agenteNo : string ) : string => {
     return '000';
 }
 
+export const obtenerBoletasPublic = async ( req : Request, res : Response ) => {
+
+    try {
+
+        const { tipoPlaca = '000', noPlaca = '' } = req.query;
+
+        const boletas = await Boleta.find({ 
+            'vehiculo.tipoPlaca': tipoPlaca,
+            'vehiculo.noPlaca': noPlaca,
+            estado: 'EMITIDA'
+        })
+        .populate('firma', 'tipo')
+        .populate('agente', 'nombre chapa')
+        .populate('articulo', 'no desc valor')
+        .populate('conductor.tipoLicencia', 'tipo desc')
+        .populate('vehiculo.tipoPlaca', 'tipo')
+        .populate('vehiculo.marca', 'marca')
+        .populate('vehiculo.color', 'color')
+        .populate('vehiculo.tipo', 'tipo')
+
+        res.json({ result : boletas });
+
+    } catch ( error ){
+        console.log( error )
+        res
+        .status(500)
+        .json(formatFinalError(error, 'No se pudo crear la boleta. Contancte con el Administrador. '))
+    
+    }
+
+}
+
 
 export const createFromFile = async ( req : Request, res : Response ) => {
     try{
@@ -84,6 +116,7 @@ export const createFromFile = async ( req : Request, res : Response ) => {
                                 nit: '000000000'
                             }
 
+                            const userCreated = req.currentUser;
 
                             const nuevaBoleta = new Boleta({ 
                                 noboleta, 
@@ -93,7 +126,8 @@ export const createFromFile = async ( req : Request, res : Response ) => {
                                 conductor, 
                                 vehiculo,
                                 agente, 
-                                articulo
+                                articulo,
+                                userCreated
                             });
 
                             await nuevaBoleta.save();
@@ -117,7 +151,9 @@ export const createFromFile = async ( req : Request, res : Response ) => {
 
 
     } catch ( error ) {
-        res.status(400).json({error: 'error'})
+        res
+        .status(500)
+        .json(formatFinalError(error, 'No se pudo crear la boleta. Contancte con el Administrador. '))
     }
 }
 
@@ -164,7 +200,9 @@ export const borrarFromFile = async ( req : Request, res : Response ) => {
 
 
     } catch ( error ) {
-        res.status(400).json({error: 'error'})
+        res
+        .status(500)
+        .json(formatFinalError(error, 'No se pudo crear la boleta. Contancte con el Administrador. '))
     }
 }
 
@@ -269,7 +307,9 @@ export const createFromFileFake = async ( req : Request, res : Response ) => {
 
 
     } catch ( error ) {
-        res.status(400).json({error: 'error'})
+        res
+        .status(500)
+        .json(formatFinalError(error, 'No se pudo borrar la boleta. Contancte con el Administrador. '))
     }
 }
 

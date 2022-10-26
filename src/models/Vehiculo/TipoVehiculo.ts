@@ -24,7 +24,7 @@ const TipoVehiculoSchema = new Schema({
 
 
 TipoVehiculoSchema.methods.toJSON = function() {
-    const {__version, __v, ...tipoVehiculo} = this.toObject();
+    const {__version, __v, userCreated, createdAt, active, ...tipoVehiculo} = this.toObject();
     return tipoVehiculo;
 }
 

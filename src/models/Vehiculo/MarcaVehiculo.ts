@@ -24,7 +24,7 @@ const MarcaVehiculoSchema = new Schema({
 
 
 MarcaVehiculoSchema.methods.toJSON = function() {
-    const {__version, __v, ...marcaVehiculo} = this.toObject();
+    const {__version, __v, userCreated, createdAt, active, ...marcaVehiculo} = this.toObject();
     return marcaVehiculo;
 }
 

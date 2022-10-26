@@ -4,6 +4,7 @@ import articulo from './articulo';
 import tipoFirma from './Conductor/tipoFirma';
 import tipoLicencia from './Conductor/tipoLicencia';
 import tipoPlaca from './tipoPlaca';
+import usuario from './usuario';
 import ColorVehiculo from './Vehiculo/ColorVehiculo';
 import MarcaVehiculo from './Vehiculo/MarcaVehiculo';
 import TipoVehiculo from './Vehiculo/TipoVehiculo';
@@ -86,7 +87,17 @@ const PagoSchema = new Schema({
     },
     reciboImage: {
         type: String,
-    }
+    },
+    createdAt: {
+        type: Number,
+        required: true,
+        default: () => ( new Date() ).getTime()
+    },
+    userCreated: {
+        type: Schema.Types.ObjectId,
+        ref: usuario,
+        required: [true, 'Se dene especificar quien creo el articulo']
+    },
 })
 
 const BoletaSchema = new Schema({
@@ -129,7 +140,14 @@ const BoletaSchema = new Schema({
         required: true,
         default: 'EMITIDA'
     },
-    pago: PagoSchema
+    pago: {
+        type: PagoSchema
+    }
 });
+
+BoletaSchema.methods.toJSON = function() {
+    const {__version, __v, pw, ...boleta} = this.toObject();
+    return boleta;
+}
 
 export default model('Boleta', BoletaSchema);

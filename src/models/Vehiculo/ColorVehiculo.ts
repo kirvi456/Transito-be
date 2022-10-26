@@ -24,7 +24,7 @@ const ColorVehiculoSchema = new Schema({
 
 
 ColorVehiculoSchema.methods.toJSON = function() {
-    const {__version, __v, ...colorVehiculo} = this.toObject();
+    const {__version, __v, userCreated, createdAt, active, ...colorVehiculo} = this.toObject();
     return colorVehiculo;
 }
 

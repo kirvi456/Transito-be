@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { check } from 'express-validator';
-import { borrarFromFile, crearBoleta, createFromFile, createFromFileFake } from '../controllers/boleta.controller';
+import { borrarFromFile, crearBoleta, createFromFile, createFromFileFake, obtenerBoletasPublic } from '../controllers/boleta.controller';
 import { ExisteAgente } from '../helpers/db-validators/agente.validators';
 import { ExisteArticulo } from '../helpers/db-validators/articulo.validator';
 import { BoletaNoRepetido } from '../helpers/db-validators/boleta.validators';
@@ -13,7 +13,17 @@ import { ExisteMarcaVehiculo } from '../helpers/db-validators/Vehiculo/marcavehi
 import { ExisteColorVehiculo } from '../helpers/db-validators/Vehiculo/colorvehiculo.validators';
 import { ExisteTipoVehiculo } from '../helpers/db-validators/Vehiculo/tipovehiculo.validators';
 
+
 const router = Router();
+
+router.get(
+    '/public',
+    [
+
+    ],
+    obtenerBoletasPublic
+)
+
 
 router.post(
     '/filefake',

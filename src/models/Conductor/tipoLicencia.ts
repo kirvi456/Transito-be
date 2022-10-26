@@ -29,7 +29,7 @@ const TipoLicenciaSchema = new Schema({
 
 
 TipoLicenciaSchema.methods.toJSON = function() {
-    const {__version, __v, ...tipoLicencia} = this.toObject();
+    const {__version, __v, userCreated, createdAt, active, ...tipoLicencia} = this.toObject();
     return tipoLicencia;
 }
 

@@ -25,7 +25,7 @@ const TipoFirmaSchema = new Schema({
 
 
 TipoFirmaSchema.methods.toJSON = function() {
-    const {__version, __v, ...tipoFirma} = this.toObject();
+    const {__version, __v, userCreated, createdAt, active, ...tipoFirma} = this.toObject();
     return tipoFirma;
 }
 

@@ -34,7 +34,7 @@ const ArticuloSchema = new Schema({
 
 
 ArticuloSchema.methods.toJSON = function() {
-    const {__version, __v, ...articulo} = this.toObject();
+    const {__version, __v, userCreated, createdAt, active, ...articulo} = this.toObject();
     return articulo;
 }
 

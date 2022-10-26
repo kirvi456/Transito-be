@@ -34,7 +34,7 @@ const AgenteSchema = new Schema({
 
 
 AgenteSchema.methods.toJSON = function() {
-    const {__version, __v, ...agente} = this.toObject();
+    const {__version, __v, userCreated, createdAt, active, ...agente} = this.toObject();
     return agente;
 }
 
