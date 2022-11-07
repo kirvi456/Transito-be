@@ -2,14 +2,17 @@
 import { Request, Response } from 'express'
 import { formatFinalError, getErrorMessage } from '../helpers/error-messages';
 import Boleta from '../models/boleta';
+import Conductor from '../models/Conductor/conductor';
 import readXlsxFile from 'read-excel-file/node';
-import fs from 'fs'
 import path from 'path';
 import { subirArchivo } from '../helpers/subir-archivo';
 import { BuscarTipoPlaca } from '../helpers/db-validators/tipoPlaca.validator';
 import { BuscarArticulo } from '../helpers/db-validators/articulo.validator';
 import { BuscarAgente } from '../helpers/db-validators/agente.validators';
 import { BuscarBoleta } from '../helpers/db-validators/boleta.validators';
+import { BuscarConductor } from '../helpers/db-validators/conductor.validators';
+import { BuscarVehiculo } from '../helpers/db-validators/vehiculo.validators';
+import Vehiculo from '../models/Vehiculo/Vehiculo';
 
 const formatearAgente = ( agenteNo : string ) : string => {
     if(agenteNo.length === 1 ) return '00' + agenteNo;
@@ -18,13 +21,15 @@ const formatearAgente = ( agenteNo : string ) : string => {
     return '000';
 }
 
+
+
 export const obtenerBoletasPublic = async ( req : Request, res : Response ) => {
 
     try {
 
         const { tipoPlaca = '000', noPlaca = '' } = req.query;
 
-        const boletas = await Boleta.find({ 
+        const boletas: any = await Boleta.find({ 
             'vehiculo.tipoPlaca': tipoPlaca,
             'vehiculo.noPlaca': noPlaca,
             estado: 'EMITIDA'
@@ -228,6 +233,7 @@ export const createFromFileFake = async ( req : Request, res : Response ) => {
                         try {
                             const noboleta = row[0];
                             const fecha = (new Date(row[1].toString())).getTime();
+                            console.log(row[1])
                             const nombre = row[2].toString();
                             const tipoPlacaString = row[3].toString().split('-')[0];
                             const noPlaca = row[3].toString().split('-')[1];
@@ -317,16 +323,48 @@ export const crearBoleta = async ( req : Request, res : Response ) => {
 
     try{
         
-        const { noboleta, fecha, conductor, vehiculo, agente, articulo } = req.body;
+        const { noboleta, fecha, lugar, firma, conductor, vehiculo, agente, articulo } = req.body;
+
+        const userCreated = req.currentUser;
+
+
+        // Buscar conductor 
+        const conductorEncontrado = await BuscarConductor( conductor.tipoLicencia, conductor.noLicencia );
+        // Buscar vehiculo 
+        const vehiculoEncontrado = await BuscarVehiculo( vehiculo.tipoPlaca, vehiculo.noPlaca );
 
         const nuevaBoleta = new Boleta({ 
             noboleta, 
             fecha, 
-            conductor, 
-            vehiculo,
+            conductor: conductorEncontrado ?? conductor, 
+            vehiculo: vehiculoEncontrado ?? vehiculo,
             agente, 
-            articulo
+            articulo,
+            lugar,
+            firma,
+            userCreated
         });
+
+        // Registrar Conductor si no estaba registrado
+        if( !conductorEncontrado && conductor.noLicencia !== 'NO SE CONSIGNO') {
+            const nuevoConductor = new Conductor({ 
+                ...conductor,
+                nombre: conductor.nombre.toUpperCase(),
+                noLicencia: conductor.noLicencia.toUpperCase().replaceAll(' ', '' ) ,
+            });
+            await nuevoConductor.save();
+        }
+
+        // Registrar Vehiculo si no estaba registrado
+        if( !vehiculoEncontrado ) {
+            const nuevoVehiculo = new Vehiculo({ 
+                ...vehiculo,
+                noPlaca: vehiculo.noPlaca.toUpperCase().replaceAll(' ', '' ) ,
+            });
+            await nuevoVehiculo.save();
+        }
+
+        
 
         await nuevaBoleta.save();
 

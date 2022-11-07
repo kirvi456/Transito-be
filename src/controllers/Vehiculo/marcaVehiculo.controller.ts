@@ -3,6 +3,21 @@ import { Request, Response } from 'express'
 import { formatFinalError } from '../../helpers/error-messages';
 import MarcaVehiculo from '../../models/Vehiculo/MarcaVehiculo';
 
+
+export const obtenerMarcas = async ( req : Request, res : Response ) => {
+    try{
+
+        const marcas = await MarcaVehiculo.find({active: true});
+
+        res.json({ result: marcas });
+
+    } catch ( error ) {
+        res
+        .status(500)
+        .json(formatFinalError(error, 'No se pudo obtener las marcas. Contancte con el Administrador. '))
+    }
+}
+
 export const crearMarcaVehiculo = async ( req : Request, res : Response ) => {
 
     try{

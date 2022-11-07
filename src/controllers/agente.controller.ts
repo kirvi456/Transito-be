@@ -2,6 +2,22 @@ import { Request, Response } from 'express'
 import { formatFinalError } from '../helpers/error-messages';
 import Agente from '../models/agente';
 
+export const obtenerAgentes = async ( req : Request, res : Response ) => { 
+
+    try {
+        
+        const agentes = await Agente.find({ active: true });
+
+        res.json({ result: agentes });
+
+    } catch( error ){
+        res
+        .status(500)
+        .json(formatFinalError(error, 'No encontro agentes. '))
+    }
+
+}
+
 export const crearAgente = async ( req : Request, res : Response ) => {
 
     try{

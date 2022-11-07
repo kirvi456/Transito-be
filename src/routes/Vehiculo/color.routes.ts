@@ -1,12 +1,21 @@
 import { Router } from 'express'
 import { check } from 'express-validator';
-import { crearColorVehiculo } from '../../controllers/Vehiculo/colorVehiculo.controller';
+import { crearColorVehiculo, obtenerColores } from '../../controllers/Vehiculo/colorVehiculo.controller';
 import { ColorVehiculoNoRepetido } from '../../helpers/db-validators/Vehiculo/colorvehiculo.validators';
 import validarCampos from '../../middlewares/validar-campos';
 import validarJWT from '../../middlewares/validar-jwt';
 import { esAdmin } from '../../middlewares/validar-roles';
 
 const router = Router();
+
+router.get(
+    '/',
+    [
+        validarJWT,
+        validarCampos
+    ],
+    obtenerColores
+)
 
 router.post(
     '/',

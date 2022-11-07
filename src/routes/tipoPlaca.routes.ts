@@ -8,9 +8,17 @@ import { esAdmin } from '../middlewares/validar-roles';
 
 const router = Router();
 
-router.get('/',
+router.get('/public',
     [
 
+    ],
+    obtenerPublic
+)
+
+router.get('/',
+    [
+        validarJWT,
+        validarCampos
     ],
     obtenerPublic
 )

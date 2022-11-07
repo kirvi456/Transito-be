@@ -1,12 +1,22 @@
 import { Router } from 'express'
 import { check } from 'express-validator';
-import { crearAgente } from '../controllers/agente.controller';
+import { crearAgente, obtenerAgentes } from '../controllers/agente.controller';
 import { AgenteNoRepetido } from '../helpers/db-validators/agente.validators';
 import validarCampos from '../middlewares/validar-campos';
 import validarJWT from '../middlewares/validar-jwt';
 import { esAdmin } from '../middlewares/validar-roles';
 
 const router = Router();
+
+
+router.get(
+    '/',
+    [
+        validarJWT,
+        validarCampos
+    ],
+    obtenerAgentes
+)
 
 router.post(
     '/',

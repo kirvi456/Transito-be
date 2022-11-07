@@ -2,12 +2,12 @@ import { Schema, model } from 'mongoose';
 import agente from './agente';
 import articulo from './articulo';
 import tipoFirma from './Conductor/tipoFirma';
-import tipoLicencia from './Conductor/tipoLicencia';
 import tipoPlaca from './tipoPlaca';
 import usuario from './usuario';
 import ColorVehiculo from './Vehiculo/ColorVehiculo';
 import MarcaVehiculo from './Vehiculo/MarcaVehiculo';
 import TipoVehiculo from './Vehiculo/TipoVehiculo';
+import tipoLicencia from './Conductor/tipoLicencia';
 
 const ConductorSchema = new Schema({
     nombre: {
@@ -36,8 +36,14 @@ const ConductorSchema = new Schema({
     genero: {
         type: String,
         required: [true, 'Se debe especificar el genero del conductor']
-    }
+    },
+    nit: {
+        type: String,
+        required: [true, 'Se debe especificar el numero de nit'],
+        default: '----'
+    },
 })
+
 
 const VehiculoSchema = new Schema ({
     tipoPlaca: {
@@ -67,11 +73,6 @@ const VehiculoSchema = new Schema ({
     noTarjeta: {
         type: String,
         required: [true, 'Se debe especificar el numero de tarjeta'],
-        default: '----'
-    },
-    nit: {
-        type: String,
-        required: [true, 'Se debe especificar el numero de nit'],
         default: '----'
     },
 })

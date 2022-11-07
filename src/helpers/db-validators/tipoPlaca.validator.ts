@@ -28,7 +28,7 @@ export const TipoPlacaExiste = async ( id : string ) => {
 
         const tipo = await TipoPlaca.findById( id );
 
-        if( tipo )
+        if( !tipo )
             throw new Error(`El tipo de placa no se encuentra registrado`)
 
     } catch ( error ) {        

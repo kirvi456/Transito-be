@@ -14,16 +14,17 @@ import rolRoutes from '../routes/rol.routes';
 import authRoutes from '../routes/auth.routes';
 
 
-import tipoPlacaRoutes from '../routes/tipoPlaca.routes';
-import agenteRoutes from '../routes/agente.routes';
-import articuloRoutes from '../routes/articulo.routes';
+import tipoPlacaRoutes  from '../routes/tipoPlaca.routes';
+import agenteRoutes     from '../routes/agente.routes';
+import articuloRoutes   from '../routes/articulo.routes';
 import tipoLicenciaRoutes from '../routes/tipoLicencia.routes';
-import tipoFirmaRoutes from '../routes/tipoFirma.routes';
-import boletaRoutes from '../routes/boleta.routes';
+import tipoFirmaRoutes  from '../routes/tipoFirma.routes';
+import boletaRoutes     from '../routes/boleta.routes';
 import marcaVehiculoRoutes from '../routes/Vehiculo/marca.routes';
 import colorVehiculoRoutes from '../routes/Vehiculo/color.routes';
 import tipoVehiculoRoutes from '../routes/Vehiculo/tipo.routes';
-
+import conductorRoutes  from '../routes/conductor.routes';
+import vehiculoRoutes   from '../routes/vehiculo.routes';
 
 
 class Server {
@@ -49,6 +50,9 @@ class Server {
         marcaVehiculo:            '/api/marcavehiculo',
         colorVehiculo:            '/api/colorvehiculo',
         tipoVehiculo:             '/api/tipovehiculo',
+        conductor:                '/api/conductor',
+        vehiculo:                 '/api/vehiculo',
+        
     
     };
 
@@ -76,15 +80,18 @@ class Server {
         this.app.use( this.paths.rols           , rolRoutes );
         this.app.use( this.paths.auth           , authRoutes );
 
-        this.app.use ( this.paths.tipoPlaca               , tipoPlacaRoutes )
-        this.app.use ( this.paths.agente                  , agenteRoutes )
-        this.app.use ( this.paths.articulo                , articuloRoutes )
-        this.app.use ( this.paths.tipoLicenciaRoutes      , tipoLicenciaRoutes )
-        this.app.use ( this.paths.tipoFirmaRoutes         , tipoFirmaRoutes )
-        this.app.use ( this.paths.boletaRoutes            , boletaRoutes )
-        this.app.use ( this.paths.marcaVehiculo           , marcaVehiculoRoutes )
-        this.app.use ( this.paths.colorVehiculo           , colorVehiculoRoutes )
-        this.app.use ( this.paths.tipoVehiculo            , tipoVehiculoRoutes )
+        this.app.use ( this.paths.tipoPlaca               , tipoPlacaRoutes );
+        this.app.use ( this.paths.agente                  , agenteRoutes );
+        this.app.use ( this.paths.articulo                , articuloRoutes );
+        this.app.use ( this.paths.tipoLicenciaRoutes      , tipoLicenciaRoutes );
+        this.app.use ( this.paths.tipoFirmaRoutes         , tipoFirmaRoutes );
+        this.app.use ( this.paths.boletaRoutes            , boletaRoutes );
+        this.app.use ( this.paths.marcaVehiculo           , marcaVehiculoRoutes );
+        this.app.use ( this.paths.colorVehiculo           , colorVehiculoRoutes );
+        this.app.use ( this.paths.tipoVehiculo            , tipoVehiculoRoutes );
+        this.app.use ( this.paths.tipoVehiculo            , tipoVehiculoRoutes );
+        this.app.use ( this.paths.conductor               , conductorRoutes );
+        this.app.use ( this.paths.vehiculo                , vehiculoRoutes );
     }
 
     middlewares() {

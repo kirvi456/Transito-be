@@ -1,6 +1,21 @@
 
 import { Request, Response } from 'express'
+import { formatFinalError } from '../../helpers/error-messages';
 import TipoLicencia from '../../models/Conductor/tipoLicencia';
+
+export const getTipoLicencia = async ( req : Request, res : Response ) => {
+    try{
+
+        const firmas = await TipoLicencia.find({active: true});
+
+        res.json({ result: firmas });
+
+    } catch ( error ) {
+        res
+        .status(500)
+        .json(formatFinalError(error, 'No se pudo obtener las licencias. Contancte con el Administrador. '))
+    }
+}
 
 export const crearTipoLicencia = async ( req : Request, res : Response ) => {
 
@@ -19,7 +34,8 @@ export const crearTipoLicencia = async ( req : Request, res : Response ) => {
         res.json( nuevoTipoLicencia );
 
     } catch ( error ) {
-        console.log( error )
-        res.status( 500 ).json({ msg: 'No se pudo crear el tipo de licencia. Contancte con el Administrador. '})
+        res
+        .status(500)
+        .json(formatFinalError(error, 'No se pudo crear las licencias. Contancte con el Administrador. '))
     }
 }

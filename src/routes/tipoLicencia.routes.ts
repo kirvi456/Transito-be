@@ -1,12 +1,21 @@
 import { Router } from 'express'
 import { check } from 'express-validator';
-import { crearTipoLicencia } from '../controllers/Conductor/tipoLicencia.controller';
+import { crearTipoLicencia, getTipoLicencia } from '../controllers/Conductor/tipoLicencia.controller';
 import { TipoLicenciaNoRepetido } from '../helpers/db-validators/tipolicencia.validators';
 import validarCampos from '../middlewares/validar-campos';
 import validarJWT from '../middlewares/validar-jwt';
 import { esAdmin } from '../middlewares/validar-roles';
 
 const router = Router();
+
+router.get(
+    '/',
+    [
+        validarJWT,
+        validarCampos
+    ],
+    getTipoLicencia
+)
 
 router.post(
     '/',

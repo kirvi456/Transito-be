@@ -6,7 +6,7 @@ import TipoPlaca from '../models/tipoPlaca';
 export const obtenerPublic = async ( req : Request, res : Response ) => {
     try{
 
-        const tipos = await TipoPlaca.find();
+        const tipos = await TipoPlaca.find({active : true});
 
         res.json( {result : tipos } );
 
@@ -19,6 +19,8 @@ export const obtenerPublic = async ( req : Request, res : Response ) => {
     }
 
 }
+
+
 export const crearTipoPlaca = async ( req : Request, res : Response ) => {
 
     try{

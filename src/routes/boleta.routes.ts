@@ -8,7 +8,7 @@ import { ExisteTipoLicencia } from '../helpers/db-validators/tipolicencia.valida
 import { TipoPlacaExiste } from '../helpers/db-validators/tipoPlaca.validator';
 import validarCampos from '../middlewares/validar-campos';
 import validarJWT from '../middlewares/validar-jwt';
-import { esAdmin } from '../middlewares/validar-roles';
+import { esAdmin, tieneRol } from '../middlewares/validar-roles';
 import { ExisteMarcaVehiculo } from '../helpers/db-validators/Vehiculo/marcavehiculo.validators';
 import { ExisteColorVehiculo } from '../helpers/db-validators/Vehiculo/colorvehiculo.validators';
 import { ExisteTipoVehiculo } from '../helpers/db-validators/Vehiculo/tipovehiculo.validators';
@@ -67,7 +67,9 @@ router.post(
         check('articulo', 'Se debe especificar el artículo').not().isEmpty(),
         check('articulo', 'Se debe especificar el artículo').isMongoId(),
         check('articulo').custom( ExisteArticulo ),
-        
+        check('firma', 'Se debe especificar el tipo de firma').not().isEmpty(),
+        check('firma', 'Se debe especificar el tipo de firma').isMongoId(),
+
         check('conductor.nombre', 'Se debe especificar el nombre del conductor').not().isEmpty(),
         check('conductor.tipoLicencia', 'Se debe especificar el tipo de licencia').not().isEmpty(),
         check('conductor.tipoLicencia', 'Se debe especificar el tipo de licencia').isMongoId(),
@@ -90,7 +92,7 @@ router.post(
 
         
         validarJWT,
-        esAdmin,
+        tieneRol(['DIGITADOR', 'ADMIN']),
         validarCampos
     ],
     crearBoleta
