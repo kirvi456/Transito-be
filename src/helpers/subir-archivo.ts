@@ -8,7 +8,7 @@ import fileUpload from 'express-fileupload';
 const extensionesPermitidas = {
     img: ['png', 'jpg', 'jpeg'],
     pdf: ['pdf'],
-    excel: ['xlsx']
+    excel: ['xlsx', 'xls']
 }
 
 

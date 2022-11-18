@@ -22,6 +22,97 @@ const formatearAgente = ( agenteNo : string ) : string => {
 }
 
 
+export const obtenerBoletasVehiculo = async ( req : Request, res : Response ) => {
+
+    try {
+
+        const { tipoPlaca, noPlaca } = req.query;
+
+        const boletas: any = await Boleta.find({
+            'vehiculo.tipoPlaca': tipoPlaca,
+            'vehiculo.noPlaca'  : noPlaca,
+        })
+        .populate('firma', 'tipo')
+        .populate('agente', 'nombre chapa')
+        .populate('articulo', 'no desc valor')
+        .populate('conductor.tipoLicencia', 'tipo desc')
+        .populate('vehiculo.tipoPlaca', 'tipo')
+        .populate('vehiculo.marca', 'marca')
+        .populate('vehiculo.color', 'color')
+        .populate('vehiculo.tipo', 'tipo')
+
+        res.json({ result : boletas });
+
+    } catch ( error ){
+        console.log( error )
+        res
+        .status(500)
+        .json(formatFinalError(error, 'No se pudo obtener la boleta. Contancte con el Administrador. '))
+    
+    }
+
+}
+
+export const obtenerBoletasConductor = async ( req : Request, res : Response ) => {
+
+    try {
+
+        const { nombre } = req.query;
+
+        const boletas: any = await Boleta.find(
+            { 'conductor.nombre': { $regex: nombre, $options: 'i' } }
+        )
+        .populate('firma', 'tipo')
+        .populate('agente', 'nombre chapa')
+        .populate('articulo', 'no desc valor')
+        .populate('conductor.tipoLicencia', 'tipo desc')
+        .populate('vehiculo.tipoPlaca', 'tipo')
+        .populate('vehiculo.marca', 'marca')
+        .populate('vehiculo.color', 'color')
+        .populate('vehiculo.tipo', 'tipo')
+
+        res.json({ result : boletas });
+
+    } catch ( error ){
+        console.log( error )
+        res
+        .status(500)
+        .json(formatFinalError(error, 'No se pudo obtener la boleta. Contancte con el Administrador. '))
+    
+    }
+
+}
+
+export const obtenerBoletasNoBoleta = async ( req : Request, res : Response ) => {
+
+    try {
+
+        const { noboleta } = req.query;
+
+        const boletas: any = await Boleta.find({ 
+            noboleta
+        })
+        .populate('firma', 'tipo')
+        .populate('agente', 'nombre chapa')
+        .populate('articulo', 'no desc valor')
+        .populate('conductor.tipoLicencia', 'tipo desc')
+        .populate('vehiculo.tipoPlaca', 'tipo')
+        .populate('vehiculo.marca', 'marca')
+        .populate('vehiculo.color', 'color')
+        .populate('vehiculo.tipo', 'tipo')
+
+        res.json({ result : boletas });
+
+    } catch ( error ){
+        console.log( error )
+        res
+        .status(500)
+        .json(formatFinalError(error, 'No se pudo obtener la boleta. Contancte con el Administrador. '))
+    
+    }
+
+}
+
 
 export const obtenerBoletasPublic = async ( req : Request, res : Response ) => {
 
@@ -211,6 +302,13 @@ export const borrarFromFile = async ( req : Request, res : Response ) => {
     }
 }
 
+const formatearArticulo = ( articulo : string ) : string => {
+    const articuloNo = articulo.split('-')[0].replaceAll(' ', '');
+    const real = articuloNo[articuloNo.length - 1] === '.' ? articuloNo.substring(0, articuloNo.length - 1 ) : articuloNo;
+
+    return real.toUpperCase();
+}
+
 export const createFromFileFake = async ( req : Request, res : Response ) => {
     try{
 
@@ -231,16 +329,16 @@ export const createFromFileFake = async ( req : Request, res : Response ) => {
                 const inserts = rows.map( ( row : any ) => {
                     return new Promise( async ( resolve, reject )  => {
                         try {
-                            const noboleta = row[0];
+                            const noboleta = row[0].toString().replace("'","");
                             const fecha = (new Date(row[1].toString())).getTime();
-                            console.log(row[1])
-                            const nombre = row[2].toString();
-                            const tipoPlacaString = row[3].toString().split('-')[0];
+                            const nombre = row[2]?.toString() || '';
+                            const tipoPlacaString = row[3].toString().split('-')[0].replaceAll(' ','');
                             const noPlaca = row[3].toString().split('-')[1];
-                            const agenteStr = formatearAgente(row[4].toString());
-                            const articuloStr = row[5].toString().replace(' ', '.');
-                            const valor = Number(row[6].toString().replace('Q.','').replace('.00',''));
+                            const agenteStr = row[4].toString().replaceAll(' ','');
+                            const articuloStr = formatearArticulo(row[5].toString());
 
+
+                            if( nombre === '' ) console.log(noboleta)
 
                             const boleta = await BuscarBoleta( noboleta );
                             if( boleta ) 
@@ -249,15 +347,15 @@ export const createFromFileFake = async ( req : Request, res : Response ) => {
 
                             const tipoPlaca = await BuscarTipoPlaca( tipoPlacaString );
                             if( !tipoPlaca ) 
-                                throw new Error('No se encontro tipo de placa ' + tipoPlaca + ' en boleta ' + noboleta);
+                                throw new Error('No se encontro tipo de placa ' + tipoPlacaString + ' en boleta ' + noboleta);
 
                             const articulo = await BuscarArticulo(articuloStr);
                             if( !articulo ) 
-                                throw new Error('No se encontro ariticulo ' + articulo + ' en boleta ' + noboleta);
+                                throw new Error('No se encontro ariticulo ' + articuloStr + ' en boleta ' + noboleta);
 
                             const agente = await BuscarAgente( agenteStr );
                             if( !agente ) 
-                                throw new Error('No se encontro agente ' + agente + ' en boleta ' + noboleta);
+                                throw new Error('No se encontro agente ' + agenteStr + ' en boleta ' + noboleta);
 
 
                             const firma = '6357f0186052529e73c19e0f';

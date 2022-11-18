@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { check } from 'express-validator';
-import { borrarFromFile, crearBoleta, createFromFile, createFromFileFake, obtenerBoletasPublic } from '../controllers/boleta.controller';
+import { borrarFromFile, crearBoleta, createFromFile, createFromFileFake, obtenerBoletasConductor, obtenerBoletasNoBoleta, obtenerBoletasPublic, obtenerBoletasVehiculo } from '../controllers/boleta.controller';
 import { ExisteAgente } from '../helpers/db-validators/agente.validators';
 import { ExisteArticulo } from '../helpers/db-validators/articulo.validator';
 import { BoletaNoRepetido } from '../helpers/db-validators/boleta.validators';
@@ -24,6 +24,38 @@ router.get(
     obtenerBoletasPublic
 )
 
+router.get(
+    '/boleta',
+    [   
+        check('noboleta', 'Se debe especificar el número de boleta').not().isEmpty(),
+        validarJWT,
+        validarCampos
+    ],
+    obtenerBoletasNoBoleta
+)
+
+router.get(
+    '/conductor',
+    [   
+        check('nombre', 'Se debe especificar el conductor').not().isEmpty(),
+        validarJWT,
+        validarCampos
+    ],
+    obtenerBoletasConductor
+)
+
+
+router.get(
+    '/vehiculo',
+    [   
+        check('tipoPlaca', 'Se debe especificar el tipo de placa').not().isEmpty(),
+        check('tipoPlaca', 'Se debe especificar el tipo de placa').isMongoId(),
+        check('noPlaca', 'Se debe especificar el número de placa').not().isEmpty(),
+        validarJWT,
+        validarCampos
+    ],
+    obtenerBoletasVehiculo
+)
 
 router.post(
     '/filefake',

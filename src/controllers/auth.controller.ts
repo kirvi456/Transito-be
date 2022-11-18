@@ -12,6 +12,8 @@ export const login = async (req: Request, res: Response) => {
     try {
         // Verificar si el email existe
         const usuarioInstancia = await Usuario.findOne({ $or:[{usuario}, {correo: usuario}] });
+
+
         if (!usuarioInstancia) {
         return res.status(400).json({
             msg: "Usuario / Contraseña no son correctos (Usuario/Correo)",

@@ -93,7 +93,7 @@ const PagoSchema = new Schema({
 
 const BoletaSchema = new Schema({
     noboleta:{
-        type: Number,
+        type: String,
         required: [true, 'Se debe indicar el número de la boleta'],
         unique: true
     },
